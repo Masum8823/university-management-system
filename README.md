@@ -54,8 +54,7 @@ To set up and run this project on your local machine, please follow these steps:
     -   Create a new database named `university_db`.
     -   Select the `university_db` database and go to the "Import" tab.
     -   Choose the `database.sql` file (if provided) from the project directory and click "Go".
-    *   *(Note: If a `.sql` file is not provided, you will need to create the tables manually as per the schema in the source code.)*
-
+   
 4.  **Running the Application:**
     -   Open your browser and navigate to:
         ```
