@@ -1,0 +1,90 @@
+body {
+    background-color: #f4f7f6; 
+}
+
+.sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 260px;
+    background: #003366;
+    color: white;
+    padding-top: 60px; 
+    transition: all 0.3s;
+}
+
+.sidebar .nav-link {
+    color: #e9ecef;
+    padding: 12px 25px;
+    font-size: 1.1rem;
+    display: flex;
+    align-items: center;
+}
+
+.sidebar .nav-link:hover {
+    background: #004488;
+    color: white;
+    border-left: 3px solid #00bfff; 
+}
+
+.sidebar .nav-link i {
+    margin-right: 15px; 
+    width: 20px; 
+    text-align: center;
+}
+
+.main-content {
+    margin-left: 260px; 
+    padding-top: 80px; 
+    padding-bottom: 30px;
+    transition: all 0.3s;
+}
+
+.top-navbar {
+    position: fixed;
+    top: 0;
+    left: 260px; 
+    right: 0;
+    height: 60px;
+    background: #ffffff;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    z-index: 1000;
+    padding: 0 30px;
+    display: flex;
+    justify-content: flex-end; 
+    align-items: center;
+}
+
+.top-navbar .nav-link {
+    color: #555;
+}
+
+/* Dashboard Stat Cards */
+.stat-card {
+    border: none;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    color: white;
+    transition: transform 0.2s;
+}
+
+.stat-card:hover {
+    transform: translateY(-5px); 
+}
+
+.bg-stat-students { background: linear-gradient(45deg, #2980b9, #3498db); }
+.bg-stat-teachers { background: linear-gradient(45deg, #27ae60, #2ecc71); }
+.bg-stat-courses { background: linear-gradient(45deg, #d35400, #e67e22); }
+.bg-stat-admins { background: linear-gradient(45deg, #8e44ad, #9b59b6); }
+
+.stat-card .card-body {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.stat-card-icon i {
+    font-size: 3rem;
+    opacity: 0.5;
+}
