@@ -72,9 +72,9 @@ To set up and run this project on your local machine, please follow these steps:
 
 This project was developed collaboratively by our team. The contribution of each member was tracked using Git and GitHub's feature-branch workflow.
 
--   **Masum:** [Briefly mention Masum's part, e.g., "Student & Teacher Management Modules"]
--   **Ritu:** [Briefly mention Ritu's part, e.g., "Core Layout, Authentication & Admin Panel"]
--   **Mahin:** []
+-   **Masum:** ["Student & Teacher Management Modules"]
+-   **Ritu:** ["Core Layout, Authentication & Admin Panel"]
+-   **Mahin:** ["Courses and Edit_course Modules"]
 -   **Ashraful:** []
 -   **Efte:** []
 
