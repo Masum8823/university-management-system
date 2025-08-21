@@ -44,7 +44,7 @@ To set up and run this project on your local machine, please follow these steps:
     -   Navigate to the `htdocs` directory inside your XAMPP installation folder (e.g., `C:/xampp/htdocs/`).
     -   Clone the repository:
         ```bash
-        git clone https://github.com/Masum688823/university-management-system.git
+        git clone https://github.com/Masum8823/university-management-system.git
         ```
     -   Rename the cloned folder to `university_project`.
 
