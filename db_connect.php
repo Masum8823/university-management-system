@@ -2,7 +2,7 @@
 // Database credentials
 define('DB_SERVER', 'localhost');
 define('DB_USERNAME', 'root');
-define('DB_PASSWORD', ''); // XAMPP এর ডিফল্ট পাসওয়ার্ড সাধারণত খালি থাকে
+define('DB_PASSWORD', ''); // XAMPP Default password remains empty
 define('DB_NAME', 'university_db');
 
 // Attempt to connect to MySQL database
