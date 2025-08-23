@@ -75,7 +75,7 @@ This project was developed collaboratively by our team. The contribution of each
 -   **Masum:** ["Student & Teacher Management Modules"]
 -   **Ritu:** ["Core Layout, Authentication & Admin Panel"]
 -   **Mahin:** ["Courses and Edit_course Modules"]
--   **Ashraful:** []
+-   **Ashraful:** ["Notice_Board and Edit_notice Modules"]
 -   **Efte:** []
 
 ---
