@@ -83,16 +83,55 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['add_student'])) {
     }
 }
 
-// --- DATA FETCH: Get all students ---
+// --- DATA FETCH: Get all students with Search and Filter ---
 $students = [];
-$sql_fetch = "SELECT student_id, name, email, phone FROM students ORDER BY student_id ASC";
-if ($result = $conn->query($sql_fetch)) {
+$search_term = isset($_GET['search']) ? trim($_GET['search']) : '';
+$sort_order = isset($_GET['sort']) ? $_GET['sort'] : 'student_id_asc';
+
+// Base SQL query
+$sql_fetch = "SELECT student_id, name, department, semester, email, phone, blood_group FROM students WHERE 1";
+
+// Append search condition
+$params = [];
+$types = '';
+if (!empty($search_term)) {
+    $sql_fetch .= " AND (name LIKE ? OR student_id LIKE ? OR email LIKE ?)";
+    $like_term = "%" . $search_term . "%";
+    $params[] = &$like_term;
+    $params[] = &$like_term;
+    $params[] = &$like_term;
+    $types .= 'sss';
+}
+
+// Append sorting condition
+switch ($sort_order) {
+    case 'name_asc':
+        $sql_fetch .= " ORDER BY name ASC";
+        break;
+    case 'name_desc':
+        $sql_fetch .= " ORDER BY name DESC";
+        break;
+    case 'student_id_desc':
+        $sql_fetch .= " ORDER BY student_id DESC";
+        break;
+    default:
+        $sql_fetch .= " ORDER BY student_id ASC";
+        break;
+}
+
+// Prepare and execute the statement
+if ($stmt_fetch = $conn->prepare($sql_fetch)) {
+    if (!empty($params)) {
+        $stmt_fetch->bind_param($types, ...$params);
+    }
+    $stmt_fetch->execute();
+    $result = $stmt_fetch->get_result();
     if ($result->num_rows > 0) {
         while ($row = $result->fetch_assoc()) {
             $students[] = $row;
         }
     }
-    $result->free();
+    $stmt_fetch->close();
 }
 $conn->close();
 ?>
@@ -164,6 +203,28 @@ $conn->close();
 <!-- Main Content: Student List -->
 <div class="d-flex justify-content-between align-items-center mb-4">
     <h2>Student Records</h2>
+    
+    <!-- Search and Filter Bar -->
+<div class="card mb-4">
+    <div class="card-body">
+        <form action="students.php" method="GET" class="row g-3 align-items-center">
+            <div class="col-md-6">
+                <input type="text" name="search" class="form-control" placeholder="Search by Name, ID, or Email..." value="<?php echo isset($_GET['search']) ? htmlspecialchars($_GET['search']) : ''; ?>">
+            </div>
+            <div class="col-md-4">
+                <select name="sort" class="form-select">
+                    <option value="student_id_asc" <?php if (isset($_GET['sort']) && $_GET['sort'] == 'student_id_asc') echo 'selected'; ?>>Sort by ID (Asc)</option>
+                    <option value="student_id_desc" <?php if (isset($_GET['sort']) && $_GET['sort'] == 'student_id_desc') echo 'selected'; ?>>Sort by ID (Desc)</option>
+                    <option value="name_asc" <?php if (isset($_GET['sort']) && $_GET['sort'] == 'name_asc') echo 'selected'; ?>>Sort by Name (A-Z)</option>
+                    <option value="name_desc" <?php if (isset($_GET['sort']) && $_GET['sort'] == 'name_desc') echo 'selected'; ?>>Sort by Name (Z-A)</option>
+                </select>
+            </div>
+            <div class="col-md-2 d-grid">
+                <button type="submit" class="btn btn-primary">Filter</button>
+            </div>
+        </form>
+    </div>
+</div>
     <!-- This button now opens the modal -->
     <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addStudentModal">
         Add New Student
