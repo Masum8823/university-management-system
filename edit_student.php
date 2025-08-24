@@ -13,15 +13,18 @@ $error_message = '';
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['update_student'])) {
     $student_id = trim($_POST['student_id']);
     $name = trim($_POST['name']);
+    $department = trim($_POST['department']);
+    $semester = trim($_POST['semester']);
     $email = trim($_POST['email']);
     $phone = trim($_POST['phone']);
+    $blood_group = trim($_POST['blood_group']);
 
     if (empty($name) || empty($email)) {
         $error_message = "Name and Email cannot be empty.";
     } else {
-        $sql = "UPDATE students SET name = ?, email = ?, phone = ? WHERE student_id = ?";
-        if ($stmt = $conn->prepare($sql)) {
-            $stmt->bind_param("ssss", $name, $email, $phone, $student_id);
+   $sql = "UPDATE students SET name = ?, department = ?, semester = ?, email = ?, phone = ?, blood_group = ? WHERE student_id = ?";
+    if ($stmt = $conn->prepare($sql)) {
+        $stmt->bind_param("ssissss", $name, $department, $semester, $email, $phone, $blood_group, $student_id);
             
             if ($stmt->execute()) {
                 // Set feedback message in session to show on the students list page
