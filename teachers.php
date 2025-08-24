@@ -74,7 +74,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['add_teacher'])) {
     }
 }
 
-// --- DATA FETCH: Get all teachers ---
 // --- DATA FETCH: Get all teachers with Search and Filter ---
 $teachers = [];
 $search_term = isset($_GET['search']) ? trim($_GET['search']) : '';
@@ -171,7 +170,12 @@ $conn->close();
 <!-- Main Content: Teacher List -->
 <div class="d-flex justify-content-between align-items-center mb-4">
     <h2>Teacher Records</h2>
-    <!-- Search and Filter Bar -->
+    <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addTeacherModal">
+        <i class="fas fa-plus"></i> Add New Teacher
+    </button>
+</div>
+
+<!-- Search and Filter Bar -->
 <div class="card mb-4">
     <div class="card-body">
         <form action="teachers.php" method="GET" class="row g-3 align-items-center">
@@ -191,10 +195,6 @@ $conn->close();
             </div>
         </form>
     </div>
-</div>
-    <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addTeacherModal">
-        Add New Teacher
-    </button>
 </div>
 
 <!-- Feedback Message Display -->
@@ -229,23 +229,26 @@ $conn->close();
                             <td><?php echo htmlspecialchars($teacher['email']); ?></td>
                             <td><?php echo htmlspecialchars($teacher['phone']); ?></td>
                             <td>
-       <button type="button" class="btn btn-sm btn-outline-info view-btn-teacher"
-            data-bs-toggle="modal"
-            data-bs-target="#viewTeacherModal"
-            data-id="<?php echo htmlspecialchars($teacher['teacher_id']); ?>"
-            data-name="<?php echo htmlspecialchars($teacher['name']); ?>"
-            data-department="<?php echo htmlspecialchars($teacher['department']); ?>"
-            data-email="<?php echo htmlspecialchars($teacher['email']); ?>"
-            data-phone="<?php echo htmlspecialchars($teacher['phone']); ?>"
-            title="View Details">
-        <i class="fas fa-eye"></i>
-    </button>
-                            <a href="edit_teacher.php?id=<?php echo htmlspecialchars($teacher['teacher_id']); ?>" class="btn btn-sm btn-outline-warning" title="Edit">
-                                <i class="fas fa-edit"></i>
-                            </a>
-                            <a href="teachers.php?action=delete&id=<?php echo htmlspecialchars($teacher['teacher_id']); ?>" class="btn btn-sm btn-outline-danger" title="Delete" onclick="return confirm('Are you sure you want to delete this teacher?');">
-                                <i class="fas fa-trash-alt"></i>
-                            </a>
+                                <!-- View Button -->
+                                <button type="button" class="btn btn-sm btn-outline-info view-btn-teacher"
+                                        data-bs-toggle="modal"
+                                        data-bs-target="#viewTeacherModal"
+                                        data-id="<?php echo htmlspecialchars($teacher['teacher_id']); ?>"
+                                        data-name="<?php echo htmlspecialchars($teacher['name']); ?>"
+                                        data-department="<?php echo htmlspecialchars($teacher['department']); ?>"
+                                        data-email="<?php echo htmlspecialchars($teacher['email']); ?>"
+                                        data-phone="<?php echo htmlspecialchars($teacher['phone']); ?>"
+                                        title="View Details">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                                <!-- Edit Button -->
+                                <a href="edit_teacher.php?id=<?php echo htmlspecialchars($teacher['teacher_id']); ?>" class="btn btn-sm btn-outline-warning" title="Edit">
+                                    <i class="fas fa-edit"></i>
+                                </a>
+                                <!-- Delete Button -->
+                                <a href="teachers.php?action=delete&id=<?php echo htmlspecialchars($teacher['teacher_id']); ?>" class="btn btn-sm btn-outline-danger" title="Delete" onclick="return confirm('Are you sure you want to delete this teacher?');">
+                                    <i class="fas fa-trash-alt"></i>
+                                </a>
                             </td>
                         </tr>
                         <?php endforeach; ?>
@@ -259,6 +262,7 @@ $conn->close();
         </div>
     </div>
 </div>
+
 <!-- View Teacher Details Modal -->
 <div class="modal fade" id="viewTeacherModal" tabindex="-1" aria-labelledby="viewTeacherModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
@@ -268,6 +272,7 @@ $conn->close();
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
+                <!-- Basic teacher info table -->
                 <table class="table table-bordered">
                     <tr>
                         <th>Teacher ID</th>
@@ -290,6 +295,12 @@ $conn->close();
                         <td id="modal_teacher_phone"></td>
                     </tr>
                 </table>
+                <!-- Section for showing assigned courses -->
+                <hr>
+                <h5 class="mt-3">Assigned Courses:</h5>
+                <div id="modal_teacher_courses">
+                    <!-- Course list will be loaded here by JavaScript -->
+                </div>
             </div>
             <div class="modal-footer">
                 <a href="#" id="export_teacher_pdf_btn" class="btn btn-danger" target="_blank"><i class="fas fa-file-pdf"></i> Export as PDF</a>
@@ -298,4 +309,5 @@ $conn->close();
         </div>
     </div>
 </div>
+
 <?php include 'footer.php'; ?>
