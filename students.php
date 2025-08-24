@@ -115,9 +115,37 @@ $conn->close();
                         <label for="email" class="form-label">Email Address</label>
                         <input type="email" class="form-control" name="email" required>
                     </div>
+                     <div class="mb-3">
+                        <label for="department" class="form-label">Department</label>
+                        <select class="form-select" name="department" required>
+                            <option value="">Select Department</option>
+                            <option value="CSE">Computer Science & Engineering</option>
+                            <option value="EEE">Electrical & Electronic Engineering</option>
+                            <option value="BBA">Business Administration</option>
+                            <option value="CE">Civil Engineering</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="semester" class="form-label">Semester</label>
+                        <input type="number" class="form-control" name="semester" min="1" max="8" required>
+                    </div>
                     <div class="mb-3">
                         <label for="phone" class="form-label">Phone Number</label>
                         <input type="text" class="form-control" name="phone">
+                    </div>
+                                        <div class="mb-3">
+                        <label for="blood_group" class="form-label">Blood Group</label>
+                        <select class="form-select" name="blood_group" required>
+                            <option value="">Select Group</option>
+                            <option value="A+">A+</option>
+                            <option value="A-">A-</option>
+                            <option value="B+">B+</option>
+                            <option value="B-">B-</option>
+                            <option value="O+">O+</option>
+                            <option value="O-">O-</option>
+                            <option value="AB+">AB+</option>
+                            <option value="AB-">AB-</option>
+                        </select>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
