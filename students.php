@@ -42,8 +42,11 @@ if (isset($_GET['action']) && $_GET['action'] == 'delete' && isset($_GET['id']))
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['add_student'])) {
     $student_id = trim($_POST['student_id']);
     $name = trim($_POST['name']);
+    $department = trim($_POST['department']);
+    $semester = trim($_POST['semester']);
     $email = trim($_POST['email']);
     $phone = trim($_POST['phone']);
+    $blood_group = trim($_POST['blood_group']);
 
     if (empty($student_id) || empty($name) || empty($email)) {
         $feedback_message = "Student ID, Name, and Email are required.";
@@ -61,19 +64,20 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['add_student'])) {
                 $feedback_class = "alert-danger";
             } else {
                 // Insert new student
-                $sql_insert = "INSERT INTO students (student_id, name, email, phone) VALUES (?, ?, ?, ?)";
-                if ($stmt_insert = $conn->prepare($sql_insert)) {
-                    $stmt_insert->bind_param("ssss", $student_id, $name, $email, $phone);
-                    if ($stmt_insert->execute()) {
-                        $feedback_message = "New student added successfully!";
-                        $feedback_class = "alert-success";
-                    } else {
-                        $feedback_message = "Error: Could not add the student.";
-                        $feedback_class = "alert-danger";
-                    }
-                    $stmt_insert->close();
-                }
-            }
+    $sql_insert = "INSERT INTO students (student_id, name, department, semester, email, phone, blood_group) VALUES (?, ?, ?, ?, ?, ?, ?)";
+    if ($stmt_insert = $conn->prepare($sql_insert)) {
+        // "s" for string, "i" for integer
+        $stmt_insert->bind_param("ssissss", $student_id, $name, $department, $semester, $email, $phone, $blood_group);
+        if ($stmt_insert->execute()) {
+            $feedback_message = "New student added successfully!";
+            $feedback_class = "alert-success";
+        } else {
+            $feedback_message = "Error: Could not add the student.";
+            $feedback_class = "alert-danger";
+        }
+        $stmt_insert->close();
+    }
+}
             $stmt_check->close();
         }
     }
