@@ -186,6 +186,8 @@ $conn->close();
                     <tr>
                         <th>Student ID</th>
                         <th>Name</th>
+                        <th>Department</th>
+                        <th>Semester</th>
                         <th>Email</th>
                         <th>Phone</th>
                         <th>Actions</th>
@@ -197,10 +199,26 @@ $conn->close();
                         <tr>
                             <td><?php echo htmlspecialchars($student['student_id']); ?></td>
                             <td><?php echo htmlspecialchars($student['name']); ?></td>
+                            <td><?php echo htmlspecialchars($student['department']); ?></td>
+                            <td><?php echo htmlspecialchars($student['semester']); ?></td>
                             <td><?php echo htmlspecialchars($student['email']); ?></td>
                             <td><?php echo htmlspecialchars($student['phone']); ?></td>
                             <td>
-                                <a href="edit_student.php?id=<?php echo htmlspecialchars($student['student_id']); ?>" class="btn btn-sm btn-outline-warning" title="Edit">
+            <button type="button" class="btn btn-sm btn-outline-info view-btn" 
+            data-bs-toggle="modal" 
+            data-bs-target="#viewStudentModal"
+            data-id="<?php echo htmlspecialchars($student['student_id']); ?>"
+            data-name="<?php echo htmlspecialchars($student['name']); ?>"
+            data-email="<?php echo htmlspecialchars($student['email']); ?>"
+            data-phone="<?php echo htmlspecialchars($student['phone']); ?>"
+            data-department="<?php echo htmlspecialchars($student['department']); ?>"
+            data-semester="<?php echo htmlspecialchars($student['semester']); ?>"
+            data-blood="<?php echo htmlspecialchars($student['blood_group']); ?>"
+            title="View Details">
+        <i class="fas fa-eye"></i>
+    </button>
+                                
+    <a href="edit_student.php?id=<?php echo htmlspecialchars($student['student_id']); ?>" class="btn btn-sm btn-outline-warning" title="Edit">
         <i class="fas fa-edit"></i>
     </a>
     <a href="students.php?action=delete&id=<?php echo htmlspecialchars($student['student_id']); ?>" class="btn btn-sm btn-outline-danger" title="Delete" onclick="return confirm('Are you sure you want to delete this student?');">
@@ -219,5 +237,51 @@ $conn->close();
         </div>
     </div>
 </div>
-
+<!-- View Student Details Modal -->
+<div class="modal fade" id="viewStudentModal" tabindex="-1" aria-labelledby="viewStudentModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="viewStudentModalLabel">Student Details</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <table class="table table-bordered">
+                    <tr>
+                        <th>Student ID</th>
+                        <td id="modal_student_id"></td>
+                    </tr>
+                    <tr>
+                        <th>Name</th>
+                        <td id="modal_name"></td>
+                    </tr>
+                    <tr>
+                        <th>Department</th>
+                        <td id="modal_department"></td>
+                    </tr>
+                    <tr>
+                        <th>Semester</th>
+                        <td id="modal_semester"></td>
+                    </tr>
+                    <tr>
+                        <th>Email</th>
+                        <td id="modal_email"></td>
+                    </tr>
+                    <tr>
+                        <th>Phone</th>
+                        <td id="modal_phone"></td>
+                    </tr>
+                    <tr>
+                        <th>Blood Group</th>
+                        <td id="modal_blood"></td>
+                    </tr>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <a href="#" id="export_pdf_btn" class="btn btn-danger" target="_blank"><i class="fas fa-file-pdf"></i> Export as PDF</a>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
 <?php include 'footer.php'; ?>
