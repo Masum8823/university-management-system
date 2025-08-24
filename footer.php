@@ -1,4 +1,4 @@
-</div> <!-- Closes the container-fluid div from header.php -->
+    </div> <!-- Closes the container-fluid div from header.php -->
 </div> <!-- Closes the main-content div from header.php -->
 
 <footer class="text-center mt-5 py-3 bg-light">
@@ -13,7 +13,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // --- JavaScript for the Student Details Modal ---
     var viewStudentModal = document.getElementById('viewStudentModal');
-
     // Check if the student modal exists on the current page to avoid errors
     if (viewStudentModal) {
         viewStudentModal.addEventListener('show.bs.modal', function (event) {
@@ -45,23 +44,22 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-    // --- JavaScript for the Teacher Details Modal ---
+    // --- JavaScript for the Teacher Details Modal (UPDATED with AJAX) ---
     var viewTeacherModal = document.getElementById('viewTeacherModal');
-
     // Check if the teacher modal exists on the current page
     if (viewTeacherModal) {
         viewTeacherModal.addEventListener('show.bs.modal', function (event) {
             // Button that triggered the modal
             var button = event.relatedTarget;
             
-            // Extract information from data-* attributes of the button
+            // Extract basic info from data-* attributes
             var id = button.getAttribute('data-id');
             var name = button.getAttribute('data-name');
             var department = button.getAttribute('data-department');
             var email = button.getAttribute('data-email');
             var phone = button.getAttribute('data-phone');
             
-            // Update the content inside the modal
+            // Update the basic info in the modal
             var modal = this;
             modal.querySelector('#modal_teacher_id').textContent = id;
             modal.querySelector('#modal_teacher_name').textContent = name;
@@ -69,9 +67,26 @@ document.addEventListener('DOMContentLoaded', function () {
             modal.querySelector('#modal_teacher_email').textContent = email;
             modal.querySelector('#modal_teacher_phone').textContent = phone;
             
-            // Update the href attribute of the PDF export button
+            // Update the PDF export button link
             var pdfBtn = modal.querySelector('#export_teacher_pdf_btn');
             pdfBtn.href = 'generate_teacher_pdf.php?id=' + id;
+
+            // New AJAX part to fetch and display assigned courses
+            var courseListDiv = modal.querySelector('#modal_teacher_courses');
+            // Show a loading message initially
+            courseListDiv.innerHTML = '<div class="text-center"><div class="spinner-border spinner-border-sm" role="status"><span class="visually-hidden">Loading...</span></div> <em>Loading courses...</em></div>';
+
+            // Fetch course data from the server
+            fetch('get_teacher_courses.php?id=' + id)
+                .then(response => response.text()) // Get the response as HTML text
+                .then(html => {
+                    // Display the fetched HTML in our placeholder div
+                    courseListDiv.innerHTML = html;
+                })
+                .catch(error => {
+                    console.error('Error fetching courses:', error);
+                    courseListDiv.innerHTML = '<div class="alert alert-danger">Failed to load course data.</div>';
+                });
         });
     }
 
