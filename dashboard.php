@@ -92,6 +92,13 @@ $conn->close();
     Publish a New Notice
     <i class="fas fa-arrow-right"></i>
   </a>
+      <!-- ############################################################# -->
+  <!-- ### New link for the "Send Email" page has been added here ### -->
+  <!-- ############################################################# -->
+  <a href="send_email.php" class="list-group-item list-group-item-action list-group-item-info d-flex justify-content-between align-items-center">
+    Send Email to Users
+    <i class="fas fa-paper-plane"></i>
+  </a>
 </div>
 
 <?php
