@@ -75,15 +75,55 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['add_teacher'])) {
 }
 
 // --- DATA FETCH: Get all teachers ---
+// --- DATA FETCH: Get all teachers with Search and Filter ---
 $teachers = [];
-$sql_fetch = "SELECT teacher_id, name, department, email, phone FROM teachers ORDER BY name ASC";
-if ($result = $conn->query($sql_fetch)) {
+$search_term = isset($_GET['search']) ? trim($_GET['search']) : '';
+$sort_order = isset($_GET['sort']) ? $_GET['sort'] : 'teacher_id_asc';
+
+// Base SQL query
+$sql_fetch = "SELECT teacher_id, name, department, email, phone FROM teachers WHERE 1";
+
+// Append search condition
+$params = [];
+$types = '';
+if (!empty($search_term)) {
+    $sql_fetch .= " AND (name LIKE ? OR teacher_id LIKE ? OR email LIKE ?)";
+    $like_term = "%" . $search_term . "%";
+    $params[] = &$like_term;
+    $params[] = &$like_term;
+    $params[] = &$like_term;
+    $types .= 'sss';
+}
+
+// Append sorting condition
+switch ($sort_order) {
+    case 'name_asc':
+        $sql_fetch .= " ORDER BY name ASC";
+        break;
+    case 'name_desc':
+        $sql_fetch .= " ORDER BY name DESC";
+        break;
+    case 'teacher_id_desc':
+        $sql_fetch .= " ORDER BY teacher_id DESC";
+        break;
+    default:
+        $sql_fetch .= " ORDER BY teacher_id ASC";
+        break;
+}
+
+// Prepare and execute the statement
+if ($stmt_fetch = $conn->prepare($sql_fetch)) {
+    if (!empty($params)) {
+        $stmt_fetch->bind_param($types, ...$params);
+    }
+    $stmt_fetch->execute();
+    $result = $stmt_fetch->get_result();
     if ($result->num_rows > 0) {
         while ($row = $result->fetch_assoc()) {
             $teachers[] = $row;
         }
     }
-    $result->free();
+    $stmt_fetch->close();
 }
 $conn->close();
 ?>
@@ -131,6 +171,27 @@ $conn->close();
 <!-- Main Content: Teacher List -->
 <div class="d-flex justify-content-between align-items-center mb-4">
     <h2>Teacher Records</h2>
+    <!-- Search and Filter Bar -->
+<div class="card mb-4">
+    <div class="card-body">
+        <form action="teachers.php" method="GET" class="row g-3 align-items-center">
+            <div class="col-md-6">
+                <input type="text" name="search" class="form-control" placeholder="Search by Name, ID, or Email..." value="<?php echo isset($_GET['search']) ? htmlspecialchars($_GET['search']) : ''; ?>">
+            </div>
+            <div class="col-md-4">
+                <select name="sort" class="form-select">
+                    <option value="teacher_id_asc" <?php if (isset($_GET['sort']) && $_GET['sort'] == 'teacher_id_asc') echo 'selected'; ?>>Sort by ID (Asc)</option>
+                    <option value="teacher_id_desc" <?php if (isset($_GET['sort']) && $_GET['sort'] == 'teacher_id_desc') echo 'selected'; ?>>Sort by ID (Desc)</option>
+                    <option value="name_asc" <?php if (isset($_GET['sort']) && $_GET['sort'] == 'name_asc') echo 'selected'; ?>>Sort by Name (A-Z)</option>
+                    <option value="name_desc" <?php if (isset($_GET['sort']) && $_GET['sort'] == 'name_desc') echo 'selected'; ?>>Sort by Name (Z-A)</option>
+                </select>
+            </div>
+            <div class="col-md-2 d-grid">
+                <button type="submit" class="btn btn-primary">Filter</button>
+            </div>
+        </form>
+    </div>
+</div>
     <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addTeacherModal">
         Add New Teacher
     </button>
@@ -168,6 +229,17 @@ $conn->close();
                             <td><?php echo htmlspecialchars($teacher['email']); ?></td>
                             <td><?php echo htmlspecialchars($teacher['phone']); ?></td>
                             <td>
+       <button type="button" class="btn btn-sm btn-outline-info view-btn-teacher"
+            data-bs-toggle="modal"
+            data-bs-target="#viewTeacherModal"
+            data-id="<?php echo htmlspecialchars($teacher['teacher_id']); ?>"
+            data-name="<?php echo htmlspecialchars($teacher['name']); ?>"
+            data-department="<?php echo htmlspecialchars($teacher['department']); ?>"
+            data-email="<?php echo htmlspecialchars($teacher['email']); ?>"
+            data-phone="<?php echo htmlspecialchars($teacher['phone']); ?>"
+            title="View Details">
+        <i class="fas fa-eye"></i>
+    </button>
                             <a href="edit_teacher.php?id=<?php echo htmlspecialchars($teacher['teacher_id']); ?>" class="btn btn-sm btn-outline-warning" title="Edit">
                                 <i class="fas fa-edit"></i>
                             </a>
@@ -187,5 +259,43 @@ $conn->close();
         </div>
     </div>
 </div>
-
+<!-- View Teacher Details Modal -->
+<div class="modal fade" id="viewTeacherModal" tabindex="-1" aria-labelledby="viewTeacherModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="viewTeacherModalLabel">Teacher Details</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <table class="table table-bordered">
+                    <tr>
+                        <th>Teacher ID</th>
+                        <td id="modal_teacher_id"></td>
+                    </tr>
+                    <tr>
+                        <th>Name</th>
+                        <td id="modal_teacher_name"></td>
+                    </tr>
+                    <tr>
+                        <th>Department</th>
+                        <td id="modal_teacher_department"></td>
+                    </tr>
+                    <tr>
+                        <th>Email</th>
+                        <td id="modal_teacher_email"></td>
+                    </tr>
+                    <tr>
+                        <th>Phone</th>
+                        <td id="modal_teacher_phone"></td>
+                    </tr>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <a href="#" id="export_teacher_pdf_btn" class="btn btn-danger" target="_blank"><i class="fas fa-file-pdf"></i> Export as PDF</a>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
 <?php include 'footer.php'; ?>
