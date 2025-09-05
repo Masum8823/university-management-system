@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="https://i.ibb.co/GPp1gZ/university-logo.png" alt="Logo" width="100" height="100">
+  <img src="[https://i.ibb.co/GPp1gZ/university-logo.png](https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgWm1YtqoFKO3q8KsKwfTAglbLRITblydJvQi8z7K8kMlxgpIrLCtismpvm-VJbsQGDJ34Lpl2ZD-X52ukZTXJqHHpwO0aCjqyzdYA_KfRjOl5gSUVGbYXTZ4SlplOZ4V4BBKsHlZ9zEWQ/s1600/NUB-Logo1-for-banner.png)" alt="Logo" width="100" height="100">
   <h1 align="center">University Management System (UMS)</h1>
   <p align="center">
     A dynamic, feature-rich, and secure web application for managing university operations.
