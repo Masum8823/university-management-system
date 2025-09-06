@@ -95,7 +95,7 @@ To get a local copy up and running, follow these simple steps.
     *   Click "Go" to create all the necessary tables.
 
 4.  **Email System Configuration (PHPMailer):**
-    *   Navigate to `send_email.php`.
+    *   Navigate to `send_email.php`.(We skip this file for security reasons)
     *   Inside the file, find the following lines:
         ```php
         $mail->Username = 'gmail-address@gmail.com';
@@ -113,11 +113,11 @@ To get a local copy up and running, follow these simple steps.
 
 A collaborative effort by:
 
-*   **Masum:** [e.g., Lead Developer, Student & Teacher Modules]
-*   **Ritu:** [e.g., Core Layout, Authentication & Admin Modules]
+*   **Masum:** [Lead Developer, Student & Teacher Modules]
+*   **Ritu:** [Assistant Lead Developer, Core Layout, Authentication & Admin Modules]
 *   **Mahin:** [Add Course module]
 *   **Ashraful:** [Add Noticeboard module]
-*   **Efte:** [Contribution]
+*   **Efte:** []
 
 ---
 
